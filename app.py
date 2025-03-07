@@ -19,8 +19,14 @@ elif Config.DB_TYPE == 'postgis':
     from app.modules.postgis_module import PostGISModule as DatabaseModule
 elif Config.DB_TYPE == 'postgres':
     from app.modules.postgres_module import PostgresModule as DatabaseModule
+elif Config.DB_TYPE == 'mongodb':
+    from app.modules.mongodb_module import MongoDBModule as DatabaseModule
+elif Config.DB_TYPE == 'graphdb':
+    from app.modules.graphdb_module import GraphDBModule as DatabaseModule
+elif Config.DB_TYPE == 'redis':
+    from app.modules.redis_module import RedisModule as DatabaseModule 
 else:
-    raise ValueError("Unsupported DB_TYPE. Use 'mysql' or 'postgis'.")
+    raise ValueError("Unsupported DB_TYPE. Use 'mysql', 'postgis', 'postgres', 'mongodb', 'graphdb' or 'redis'.")
 
 db_module = DatabaseModule(
     host=Config.DB_HOST,

@@ -61,3 +61,32 @@ services:
       - ./backups:/backups
     depends_on:
       - postgis
+
+  mongodb:
+    image: mongo:6.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: testuser
+      MONGO_INITDB_ROOT_PASSWORD: testpassword
+      MONGO_INITDB_DATABASE: test_database
+    ports:
+      - "27017:27017"
+    expose:
+      - 27017
+
+  nards_backup_mongo:
+    build: .
+    environment:
+      DB_HOST: mongodb
+      DB_PORT: 27017
+      DB_USER: testuser
+      DB_PASSWORD: testpassword
+      DB_TYPE: mongodb
+      BACKUP_DIR: /backups
+      CRON_CONFIGS: '[{"cron": "* * * * *", "retention_max": 7, "name": "mongo_backup"}]'
+      RESTORE_CONFIG_NAME: 'mongo_backup'
+    ports:
+      - "5003:5000"
+    volumes:
+      - ./backups:/backups
+    depends_on:
+      - mongodb
