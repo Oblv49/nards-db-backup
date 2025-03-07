@@ -48,7 +48,7 @@ class MongoDBModule(AbstractModule):
             try:
                 logger.info(f"Attempt {attempt}: Connecting to MongoDB at {self._host}:{self._port}")
                 # Create the connection URI including credentials and the maintenance database
-                uri = f"mongodb://{self._username}:{self._password}@{self._host}:{self._port}/{self._maintenance_db}"
+                uri = f"mongodb://{self._username}:{self._password}@{self._host}:{self._port}/{self._maintenance_db}?authSource=admin"
                 client = MongoClient(uri, serverSelectionTimeoutMS=5000)
                 # Execute a simple command to verify the connection
                 client.server_info()
@@ -106,7 +106,8 @@ class MongoDBModule(AbstractModule):
         command = (
             f"mongodump --host {self._host} --port {self._port} "
             f"--username {self._username} --password {self._password} "
-            f"--db {name} --archive={destination_file} --gzip"
+            f"--db {name} --authenticationDatabase admin "
+            f"--archive={destination_file} --gzip"
         )
         try:
             subprocess.run(command, shell=True, check=True, text=True)
@@ -133,7 +134,8 @@ class MongoDBModule(AbstractModule):
         command = (
             f"mongorestore --host {self._host} --port {self._port} "
             f"--username {self._username} --password {self._password} "
-            f"--db {name} --drop --archive={source_file} --gzip"
+            f"--db {name} --authenticationDatabase admin --drop "
+            f"--archive={source_file} --gzip"
         )
         try:
             subprocess.run(command, shell=True, check=True, text=True)

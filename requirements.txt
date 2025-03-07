@@ -1,8 +1,22 @@
+# Core dependencies
 Flask==3.0.3
-psycopg2-binary==2.9.10
-mysql-connector-python==9.1.0
 APScheduler==3.10.4
 click==8.1.7
+requests==2.31.0
+
+# Database specific libraries
+psycopg2-binary==2.9.10  # PostgreSQL and PostGIS
+mysql-connector-python==9.1.0  # MySQL
+pymongo>=3.12.1  # MongoDB
+redis==5.0.1  # Redis
+
+# Note: GraphDB doesn't require a specific Python library, uses requests for REST API
+
+# System dependencies (not installed by pip):
+# - MongoDB: requires mongodump and mongorestore commands to be available
+# - Redis: handled by the redis Python library
+# - GraphDB: requires curl command to be available
+
+# Testing dependencies
 pytest==8.3.3
 pytest-docker==3.1.1
-pymongo>=3.12.1
